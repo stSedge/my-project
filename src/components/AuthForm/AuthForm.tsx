@@ -1,47 +1,48 @@
 import React, { useState } from 'react';
-import axios from '../axiosConfig';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setAge, setDiscount, setGender, setJwt, setName, setTotalSum, setEmail } 
-    from '../reducer/UserStore/index';
-import { setIsAuth } from '../reducer/UserStore/index';
+import { setAge, setDiscount, setGender, setJwt, setName, setTotalSum, setEmail } from '../../reducer/UserStore/index';
+import { setIsAuth } from '../../reducer/UserStore/index';
+import { authenticateUser, getUserData } from './AuthFormThunks'; 
 
-const AuthForm: React.FC = () => {
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [error, setError] = useState<string>('');
+const AuthFormUI: React.FC = () => {
+    const [email, setEmail] = useState<string>(''); 
+    const [password, setPassword] = useState<string>(''); 
+    const [error, setError] = useState<string>(''); 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-    
+        
         try {
-            const params = new URLSearchParams();
-            params.append('username', email);
-            params.append('password', password);
-
-            const response = await axios.post('/token', params, {
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            });
-            dispatch(setJwt(response.data.access_token));
+            const accessToken = await authenticateUser(email, password);
+            dispatch(setJwt(accessToken));
             dispatch(setIsAuth(true));
-            const response1 = await axios.get(`/api/user_email/${email}`);
-            console.log(response1.data.email);
-            dispatch(setName(response1.data.name));
-            dispatch(setGender(response1.data.gender));
-            dispatch(setAge(response1.data.age));
-            dispatch(setDiscount(response1.data.discount));
-            dispatch(setTotalSum(response1.data.total_sum));
-            //dispatch(setEmail(response1.data.emailil));
+
+            const userData = await getUserData(email);
+            
+            dispatch(setName(userData.name));
+            dispatch(setGender(userData.gender));
+            dispatch(setAge(userData.age));
+            dispatch(setDiscount(userData.discount));
+            dispatch(setTotalSum(userData.total_sum));
+            //dispatch(setEmail(userData.email));
 
             navigate('/home');
-        } catch (error) {
-            alert('Неверные данные или формат.');
+        } catch (error: any) {
+            if (error.response) {
+                console.log('Error response:', error.response);
+                if (error.response.status === 422) {
+                    alert('Неверные данные или формат.');
+                } else {
+                    setError('Произошла ошибка при авторизации');
+                }
+            } else {
+                setError('Ошибка при соединении с сервером');
+            }
         }
     };
-    
 
     return (
         <div>
@@ -75,4 +76,4 @@ const AuthForm: React.FC = () => {
     );
 };
 
-export default AuthForm;
+export default AuthFormUI;

@@ -1,17 +1,30 @@
 import React, { useState } from 'react';
-import axios from "../axiosConfig.ts";
-import { userJwtSelector } from '../reducer/UserStore/reducer.ts';
+import axios from "../axiosConfig";
+import { userJwtSelector } from '../reducer/UserStore/reducer';
 import { useSelector } from 'react-redux';
+
+interface report_data {
+  seller_name : string,
+  cost : number,
+  discount: number,
+  final_cost : number,
+  count : number,
+  summa : number,
+  product_type : string,
+  date : string,
+  user_id : number,
+  product_id : number,
+}
 
 const ReportForm = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [reportData, setReportData] = useState([]);
+  const [reportData, setReportData] = useState<report_data[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>();
   const jwt = useSelector(userJwtSelector);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
 
     setReportData([]);
@@ -25,7 +38,7 @@ const ReportForm = () => {
     });
       setReportData(response.data); 
     } catch (err) {
-      setError('Ошибка при получении отчета',err);
+      setError('Ошибка при получении отчета');
     } finally {
       setLoading(false);
     }

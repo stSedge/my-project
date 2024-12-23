@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppState } from "../../store/index.ts";
-import { initialState } from "./initState.ts";
-import { setTotalSum } from "./index.ts";
+import { AppState } from "../../store/index";
+import { initialState } from "./initState";
+import { setTotalSum } from "./index";
 
 export const slice = createSlice({
   name: 'userStore',
@@ -34,11 +34,11 @@ export const slice = createSlice({
   }
 });
 
-export const userAuthSelector = (state: AppState) => state.default.isAuth;
-export const userJwtSelector = (state: AppState) => state.default.jwt;
-export const userNameSelector = (state: AppState) => state.default.name;
-export const userAgeSelector = (state: AppState) => state.default.age;
-export const userGenderSelector = (state: AppState) => state.default.gender;
-export const userEmailSelector = (state: AppState) => state.default.email;
-export const userDiscountSelector = (state: AppState) => state.default.discount;
-export const userTotalSumSelector = (state: AppState) => state.default.total_sum;
+export const userAuthSelector = (state: AppState) => state.userStore.isAuth;
+export const userJwtSelector = (state: AppState) => state.userStore.jwt;
+export const userNameSelector = (state: AppState) => state.userStore.name;
+export const userAgeSelector = (state: AppState) => state.userStore.age;
+export const userGenderSelector = (state: AppState) => state.userStore.gender;
+export const userEmailSelector = (state: AppState) => state.userStore.email;
+export const userDiscountSelector = (state: AppState) => state.userStore.discount;
+export const userTotalSumSelector = (state: AppState) => state.userStore.total_sum;

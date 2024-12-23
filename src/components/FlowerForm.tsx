@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "../axiosConfig.ts";
-import { userJwtSelector } from "../reducer/UserStore/reducer.ts";
+import axios from "../axiosConfig";
+import { userJwtSelector } from "../reducer/UserStore/reducer";
 import { useSelector } from "react-redux";
 
 const FlowerForm = () => {
@@ -9,7 +9,7 @@ const FlowerForm = () => {
     const [error, setError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
         setIsSubmitting(true);
         setError("");
@@ -23,7 +23,6 @@ const FlowerForm = () => {
                     Authorization: `Bearer ${jwt}`,
                 },
             });
-            console.log("Цветок успешно добавлен:", response.data);
         } catch (err) {
             console.error("Ошибка при добавлении цветка:", err);
             setError("Произошла ошибка при добавлении цветка");

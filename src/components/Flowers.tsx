@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from '../axiosConfig.ts';
+import axios from '../axiosConfig';
 
 const Flowers: React.FC = () => {
     const [flowers, setFlowers] = useState<any[]>([]);

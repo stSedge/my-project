@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import axios from '../axiosConfig.ts';
+import axios from '../axiosConfig';
 import { useSelector } from "react-redux";
 import { userAgeSelector, userAuthSelector, userDiscountSelector, 
   userEmailSelector, userGenderSelector, userNameSelector, userTotalSumSelector } 
-  from "../reducer/UserStore/reducer.ts"; 
+  from "../reducer/UserStore/reducer"; 
 
 const HomePage: React.FC = () => {
   const isAuth = useSelector(userAuthSelector);

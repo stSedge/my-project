@@ -1,4 +1,3 @@
-// src/components/Navigation.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -23,6 +22,12 @@ const Navigation: React.FC = () => {
                 </li>
                 <li>
                     <Link to="/add_flowers">Добавить цветы</Link>
+                </li>
+                <li>
+                    <Link to="/delete_flowers">Удалить цветы</Link>
+                </li>
+                <li>
+                    <Link to="/update_flowers">Обновить данные о цветах</Link>
                 </li>
                 <li>
                     <Link to="/add_products">Добавить товары</Link>

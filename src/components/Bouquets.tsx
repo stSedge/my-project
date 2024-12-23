@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from '../axiosConfig.ts'; 
+import axios from '../axiosConfig'; 
 
 import { useSelector } from 'react-redux';
-import { userAuthSelector } from '../reducer/UserStore/reducer.ts';
-import { userJwtSelector } from '../reducer/UserStore/reducer.ts';
+import { userJwtSelector } from '../reducer/UserStore/reducer';
 
 const Bouquets: React.FC = () => {
     const jwt = useSelector(userJwtSelector);

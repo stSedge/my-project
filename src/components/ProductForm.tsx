@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "../axiosConfig.ts";
-import { userJwtSelector } from "../reducer/UserStore/reducer.ts";
+import axios from "../axiosConfig";
+import { userJwtSelector } from "../reducer/UserStore/reducer";
 import { useSelector } from "react-redux";
 
 const ProductForm = () => {
@@ -9,7 +9,7 @@ const ProductForm = () => {
     const [error, setError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
         setIsSubmitting(true);
         setError("");

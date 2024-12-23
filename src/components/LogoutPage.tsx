@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import axios from '../axiosConfig.ts';
+import axios from '../axiosConfig';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setJwt } from '../reducer/UserStore/index.ts';
-import { setIsAuth } from '../reducer/UserStore/index.ts';
+import { setJwt } from '../reducer/UserStore/index';
+import { setIsAuth } from '../reducer/UserStore/index';
 
 const LogoutPage: React.FC = () => {
   const dispatch = useDispatch();
