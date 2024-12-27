@@ -30,11 +30,19 @@ export const slice = createSlice({
     },
     setTotalSum : (state, action: PayloadAction<number>) => {
       state.total_sum = action.payload;
+    },
+    setId : (state, action: PayloadAction<number>) => {
+      state.id = action.payload;
+    },
+    setIsAdmin : (state, action: PayloadAction<boolean>) => {
+      state.isAdmin = action.payload;
     }
   }
 });
 
 export const userAuthSelector = (state: AppState) => state.userStore.isAuth;
+export const userIdSelector = (state: AppState) => state.userStore.id;
+export const userAdminSelector = (state: AppState) => state.userStore.isAdmin;
 export const userJwtSelector = (state: AppState) => state.userStore.jwt;
 export const userNameSelector = (state: AppState) => state.userStore.name;
 export const userAgeSelector = (state: AppState) => state.userStore.age;

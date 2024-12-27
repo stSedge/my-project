@@ -2,6 +2,7 @@ import { slice } from "./reducer";
 
 export const{
   setIsAuth,
+  setIsAdmin,
   setJwt,
   setDiscount,
   setTotalSum,
@@ -9,6 +10,7 @@ export const{
   setName,
   setAge,
   setGender,
+  setId,
 } = slice.actions;
 
 export default slice.reducer;

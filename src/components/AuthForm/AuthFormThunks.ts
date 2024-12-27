@@ -1,4 +1,6 @@
+
 import axios from '../../axiosConfig';
+
 
 export const authenticateUser = async (email: string, password: string) => {
   try {
@@ -16,9 +18,12 @@ export const authenticateUser = async (email: string, password: string) => {
   }
 };
 
-export const getUserData = async (email: string) => {
+export const getUserData = async (email: string, jwt: string) => {
   try {
-    const response = await axios.get(`/api/user_email/${email}`);
+    const response = await axios.get(`/api/user_email/${email}`,{
+      headers: {
+          Authorization: `Bearer ${jwt}`,},
+      });
     return response.data;
   } catch (error) {
     throw error;

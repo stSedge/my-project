@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
 import axios from '../axiosConfig';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setJwt } from '../reducer/UserStore/index';
-import { setIsAuth } from '../reducer/UserStore/index';
-
 
 const CreateAccForm: React.FC = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-    const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
     const [age, setAge] = useState(0);
     const [gender, setGender] = useState("male");
@@ -35,7 +30,7 @@ const CreateAccForm: React.FC = () => {
 
         try {
             const response = await axios.post("/api/create_user", userData);
-            navigate("/home");
+            navigate("/login");
         } catch (err) {
             setError("Произошла ошибка при создании пользователя");
         } finally {
@@ -44,63 +39,62 @@ const CreateAccForm: React.FC = () => {
     };
 
     return (
-        <div>
-            <h2>Создание пользователя</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="name">Имя:</label>
-                    <input
-                        type="text"
-                        id="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="email">Email:</label>
+        <div className="container mt-5">
+            <h2 className="text-center mb-4">Регистрация</h2>
+            <form 
+                onSubmit={handleSubmit} 
+                className="p-4 border rounded shadow-sm" 
+                style={{ maxWidth: '400px', margin: '0 auto' }} // Ограничиваем ширину формы
+            >
+                <div className="mb-3">
+                    <label htmlFor="email" className="form-label">Email:</label>
                     <input
                         type="email"
                         id="email"
+                        className="form-control"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
                 </div>
-                <div>
-                    <label htmlFor="login">Логин:</label>
-                    <input
-                        type="text"
-                        id="login"
-                        value={login}
-                        onChange={(e) => setLogin(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="password">Пароль:</label>
+                <div className="mb-3">
+                    <label htmlFor="password" className="form-label">Пароль:</label>
                     <input
                         type="password"
                         id="password"
+                        className="form-control"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
                 </div>
-                <div>
-                    <label htmlFor="age">Возраст:</label>
+                <div className="mb-3">
+                    <label htmlFor="name" className="form-label">Имя:</label>
+                    <input
+                        type="text"
+                        id="name"
+                        className="form-control"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="age" className="form-label">Возраст:</label>
                     <input
                         type="number"
                         id="age"
+                        className="form-control"
                         value={age}
                         onChange={(e) => setAge(Number(e.target.value))}
                         required
                     />
                 </div>
-                <div>
-                    <label htmlFor="gender">Пол:</label>
+                <div className="mb-3">
+                    <label htmlFor="gender" className="form-label">Пол:</label>
                     <select
                         id="gender"
+                        className="form-select"
                         value={gender}
                         onChange={(e) => setGender(e.target.value)}
                     >
@@ -108,9 +102,13 @@ const CreateAccForm: React.FC = () => {
                         <option value="female">Женский</option>
                     </select>
                 </div>
-                {error && <div style={{ color: "red" }}>{error}</div>}
-                <button type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? "Создаю..." : "Создать пользователя"}
+                {error && <div className="text-danger mb-3">{error}</div>}
+                <button 
+                    type="submit" 
+                    className="btn btn-primary w-100" 
+                    disabled={isSubmitting}
+                >
+                    {isSubmitting ? "Минуточку..." : "Зарегистрироваться"}
                 </button>
             </form>
         </div>

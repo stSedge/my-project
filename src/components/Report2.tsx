@@ -4,20 +4,16 @@ import { userJwtSelector } from '../reducer/UserStore/reducer';
 import { useSelector } from 'react-redux';
 
 interface report_data {
-  seller_name : string,
-  cost : number,
-  discount: number,
-  final_cost : number,
-  count : number,
-  summa : number,
-  product_type : string,
-  product_name : string | null,
-  date : string,
-  user_id : number,
-  product_id : number,
+  seller_name: string,
+  cost: number,
+  count: number,
+  product_type: string,
+  date: string,
+  product_name: string | null,
+  product_id: number,
 }
 
-const ReportForm = () => {
+const ReportForm2 = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [reportData, setReportData] = useState<report_data[]>([]);
@@ -26,7 +22,7 @@ const ReportForm = () => {
   const [error, setError] = useState<string | null>();
   const [filterProductType, setFilterProductType] = useState<string>(''); 
   const [filterProductName, setFilterProductName] = useState<string>(''); 
-  const [filterDate, setFilterDate] = useState<string>('');
+  const [filterDate, setFilterDate] = useState<string>(''); 
   const jwt = useSelector(userJwtSelector);
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
@@ -36,15 +32,15 @@ const ReportForm = () => {
     setError(null);
     setLoading(true);
     try {
-      const response = await axios.get(`/api/otchet/'${startDate}'/'${endDate}'`, {
+      const response = await axios.get(`/api/otchet2/'${startDate}'/'${endDate}'`, {
         headers: {
-            Authorization: `Bearer ${jwt}`,
+          Authorization: `Bearer ${jwt}`,
         },
       });
       setReportData(response.data);
       const x = reportData.filter((item) => item.product_name !== null);
       setReportData(x);
-      setFilteredData(x); 
+      setFilteredData(x);
     } catch (err) {
       setError('Ошибка при получении отчета');
     } finally {
@@ -55,12 +51,17 @@ const ReportForm = () => {
   const handleFilter = () => {
     let filtered = reportData;
 
+    // Фильтрация по типу товара
     if (filterProductType !== '') {
-      filtered = filtered.filter((item) => item.product_type.toLowerCase().includes(filterProductType.toLowerCase()));
+      filtered = filtered.filter((item) => item.product_type.toLowerCase() === filterProductType.toLowerCase());
     }
+
+    // Фильтрация по названию товара
     if (filterProductName !== '') {
       filtered = filtered.filter((item) => item.product_name?.toLowerCase().includes(filterProductName.toLowerCase()));
     }
+
+    // Фильтрация по дате
     if (filterDate !== '') {
       filtered = filtered.filter((item) => item.date === filterDate);
     }
@@ -68,16 +69,17 @@ const ReportForm = () => {
     setFilteredData(filtered); 
   };
 
+  // Сброс фильтров
   const handleResetFilters = () => {
     setFilterProductType('');
     setFilterProductName('');
     setFilterDate('');
-    setFilteredData(reportData); 
+    setFilteredData(reportData);
   };
 
   return (
     <div className="container mt-4">
-      <h1 className="text-center mb-4">Отчет по продажам</h1>
+      <h1 className="text-center mb-4">Отчет по поставкам</h1>
 
       <form onSubmit={handleSubmit} className="mb-4">
         <div className="row justify-content-center">
@@ -176,7 +178,7 @@ const ReportForm = () => {
           </button>
           <button
             type="button"
-            className="btn btn-secondary ms-2" 
+            className="btn btn-secondary ms-2"
             onClick={handleResetFilters}
           >
             Сбросить фильтры
@@ -192,13 +194,10 @@ const ReportForm = () => {
                 <th>Продавец</th>
                 <th>Стоимость</th>
                 <th>Количество</th>
-                <th>Скидка</th>
-                <th>Итоговая стоимость</th>
                 <th>Тип товара</th>
                 <th>Название товара</th>
                 <th>ID товара</th>
                 <th>Дата</th>
-                <th>ID пользователя</th>
               </tr>
             </thead>
             <tbody>
@@ -207,13 +206,10 @@ const ReportForm = () => {
                   <td>{report.seller_name}</td>
                   <td>{report.cost}</td>
                   <td>{report.count}</td>
-                  <td>{report.discount}</td>
-                  <td>{report.final_cost}</td>
-                  <td>{report.product_type === 'bouquet' ? 'Букет' : (report.product_type === 'flower' ? 'Цветок' : 'Товар для дома')}</td>
+                  <td>{report.product_type === 'bouquet' ? 'Букет' : (report.product_type === 'flower' ? 'Цветок' : 'Товары для дома')}</td>
                   <td>{report.product_name}</td>
                   <td>{report.product_id}</td>
                   <td>{report.date}</td>
-                  <td>{report.user_id}</td>
                 </tr>
               ))}
             </tbody>
@@ -224,4 +220,4 @@ const ReportForm = () => {
   );
 };
 
-export default ReportForm;
+export default ReportForm2;

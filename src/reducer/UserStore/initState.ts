@@ -7,6 +7,8 @@ interface userStoreInterface {
     gender: string | null,
     total_sum: number | null,
     discount: number | null,
+    isAdmin: boolean | null,
+    id: number | null
   }
   
   export const initialState: userStoreInterface = {
@@ -18,4 +20,6 @@ interface userStoreInterface {
     gender: null,
     total_sum: 0,
     discount: 0,
+    isAdmin: false,
+    id: null
   };
