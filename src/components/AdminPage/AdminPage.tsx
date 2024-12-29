@@ -3,7 +3,7 @@ import { Container, Row, Col, Button, Card, Form, Modal } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom';
 import { addFlower, delFlower, updFlower } from './Flower';
 import { useSelector } from 'react-redux';
-import { userJwtSelector } from '../reducer/UserStore/reducer';
+import { userJwtSelector } from '../../reducer/UserStore/reducer';
 import { addBouquet, delBouquet, updBouquet } from './Bouquet';
 import { addProduct, delProduct, updProduct } from './Product';
 //import { addSupply, delSupply, updSupply } from './Supply'; // Добавлена импорт функции для поставок

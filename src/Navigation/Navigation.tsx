@@ -29,7 +29,7 @@ const Navigation: React.FC = () => {
               <Link to="/bouquets" className="nav-link">Букеты</Link>
             </li>
             <li className="nav-item">
-              <Link to="/get_additional_products" className="nav-link">Товары для дома</Link>
+              <Link to="/additional_products" className="nav-link">Товары для дома</Link>
             </li>
             {isAdmin ?
             (<li className="nav-item">

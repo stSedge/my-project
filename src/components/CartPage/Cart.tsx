@@ -1,20 +1,19 @@
 import React, { createContext, useState, ReactNode, useContext } from 'react';
 
-interface Flower {
+interface product_data {
     id: number;
     name: string;
     price: number;
-    image: string;
 }
 
 interface CartItem {
-    flower: Flower;
+    flower: product_data;
     quantity: number; 
 }
 
 interface CartContextType {
     cart: CartItem[];
-    addToCart: (flower: Flower) => void;
+    addToCart: (flower: product_data) => void;
     removeFromCart: (id: number) => void;
     clearCart: () => void;
 }
@@ -24,7 +23,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [cart, setCart] = useState<CartItem[]>([]);
 
-    const addToCart = (flower: Flower) => {
+    const addToCart = (flower: product_data) => {
         setCart((prevCart) => {
             const existingItemIndex = prevCart.findIndex(item => item.flower.id === flower.id && item.flower.name === flower.name);
             if (existingItemIndex >= 0) {

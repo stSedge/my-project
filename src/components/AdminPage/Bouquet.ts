@@ -1,13 +1,13 @@
 
-import axios from '../axiosConfig';
+import axios from '../../axiosConfig';
 
 
-export const addProduct = async (flowername: string, jwt: string) => {
+export const addBouquet = async (flowername: string , jwt: string) => {
     const flowerData = {
         name: flowername,
     };
   try {
-    const response = await axios.post("/api/create_additional_product", flowerData, {
+    const response = await axios.post("/api/create_bouquet", flowerData, {
         headers: {
             Authorization: `Bearer ${jwt}`,
         },
@@ -18,9 +18,10 @@ export const addProduct = async (flowername: string, jwt: string) => {
   }
 };
 
-export const delProduct = async (flowername: number | string, jwt: string) => {
+
+export const delBouquet = async (flowername: number | string, jwt: string) => {
     try {
-      await axios.delete(`/api/delete_additional_product/${flowername}`, {
+      await axios.delete(`/api/delete_bouquet/${flowername}`, {
         headers: {
             Authorization: `Bearer ${jwt}`, 
         },
@@ -29,13 +30,13 @@ export const delProduct = async (flowername: number | string, jwt: string) => {
       throw error;
     }
 };
-  
-export const updSupply = async (flowername: string, additional_product_id : string | number, jwt: string) => {
+
+export const updBouquet = async (flowername: string, bouquet_id : string | number, jwt: string) => {
     const flowerData = {
         name: flowername,
     };
     try {
-      const response = await axios.put(`/api/update_additional_product/${additional_product_id}`, flowerData, {
+      const response = await axios.put(`/api/update_bouquet/${bouquet_id}`, flowerData, {
           headers: {
               Authorization: `Bearer ${jwt}`,
           },
@@ -45,3 +46,4 @@ export const updSupply = async (flowername: string, additional_product_id : stri
       throw error;
     }
   };
+  

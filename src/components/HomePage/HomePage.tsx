@@ -2,11 +2,11 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userAdminSelector, userAgeSelector, userAuthSelector, userDiscountSelector, 
   userEmailSelector, userGenderSelector, userNameSelector, userTotalSumSelector } 
-  from "../reducer/UserStore/reducer"; 
+  from "../../reducer/UserStore/reducer"; 
 import { Card, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { setIsAdmin, setIsAuth, setJwt } from '../reducer/UserStore';
-import { useCart } from './context/CartContext';
+import { setIsAdmin, setIsAuth, setJwt } from '../../reducer/UserStore';
+import { useCart } from '../CartPage/Cart';
 
 const HomePage: React.FC = () => {
   const isAuth = useSelector(userAuthSelector);

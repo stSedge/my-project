@@ -1,21 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import axios from '../axiosConfig';
 import { useSelector } from 'react-redux';
-import { userAdminSelector, userJwtSelector } from '../reducer/UserStore/reducer';
-import { useCart } from './context/CartContext'; 
+import { userAdminSelector, userJwtSelector } from '../../reducer/UserStore/reducer';
+import { useCart } from '../CartPage/Cart'; 
 import { Button, Container, Row, Col, Card, Spinner, Alert, Modal, Form, Toast, ToastContainer } from 'react-bootstrap';
+import { fetchBouquetPrice, flowersForBouquets, allBouquets } from './BouquetsThunks';
+
+interface product_data {
+    name: string, 
+    id: number,
+    id_type: number,
+    price: number
+}
 
 const Bouquets: React.FC = () => {
     const jwt = useSelector(userJwtSelector);
     const isAdmin = useSelector(userAdminSelector);
-    const [bouquets, setBouquets] = useState<any[]>([]);
-    const [filteredBouquets, setFilteredBouquets] = useState<any[]>([]);
+    const [bouquets, setBouquets] = useState<product_data[]>([]);
+    const [filteredBouquets, setFilteredBouquets] = useState<product_data[]>([]);
     const [error, setError] = useState<string>('');
     const [bouquetFlowers, setBouquetFlowers] = useState<{ [key: number]: string[] }>({});
     const [loading, setLoading] = useState<boolean>(true); 
     const { addToCart } = useCart(); 
     const [showModal, setShowModal] = useState(false);
-    const [currentBouquet, setCurrentBouquet] = useState<any>(null); 
+    const [currentBouquet, setCurrentBouquet] = useState<product_data>(); 
     const [showToast, setShowToast] = useState<boolean>(false); 
 
     // Фильтрация
@@ -24,31 +31,13 @@ const Bouquets: React.FC = () => {
     const [tempSearchQuery, setTempSearchQuery] = useState<string>('');
     const [tempPriceRange, setTempPriceRange] = useState<{ min: number, max: number }>({ min: 0, max: 20000 });
 
-    // Функция для получения цены букета
-    const fetchBouquetPrice = async (bouquetId: number) => {
-        try {
-            const response = await axios.get(`api/cost/2/${bouquetId}`, {
-                headers: {
-                    Authorization: `Bearer ${jwt}`,
-                },
-            });
-            return response.data; 
-        } catch (err) {
-            console.error(`Ошибка при получении цены для букета ${bouquetId}`, err);
-            return null;
-        }
-    };
 
     const fetchFlowersForBouquet = async (bouquetId: number) => {
         try {
-            const response = await axios.get(`api/compound_bouquet_flowers/${bouquetId}`, {
-                headers: {
-                    Authorization: `Bearer ${jwt}`,
-                },
-            });
+            const response = await flowersForBouquets(bouquetId, jwt);
             setBouquetFlowers((prevState) => ({
                 ...prevState,
-                [bouquetId]: response.data, 
+                [bouquetId]: response, 
             }));
         } catch (err) {
             console.error(`Ошибка при получении состава цветов для букета ${bouquetId}`, err);
@@ -57,15 +46,10 @@ const Bouquets: React.FC = () => {
 
     const fetchBouquets = async () => {
         try {
-            const response = await axios.get('api/all_bouquets', {
-                headers: {
-                    Authorization: `Bearer ${jwt}`,
-                },
-            });
-            const bouquetsData = response.data;
+            const bouquetsData = await allBouquets(jwt);
             const bouquetsWithPrice = await Promise.all(
-                bouquetsData.map(async (bouquet: any) => {
-                    const price = await fetchBouquetPrice(bouquet.id);
+                bouquetsData.map(async (bouquet: product_data) => {
+                    const price = await fetchBouquetPrice(bouquet.id, jwt);
                     await fetchFlowersForBouquet(bouquet.id); 
                     return { ...bouquet, price };
                 })
@@ -110,13 +94,13 @@ const Bouquets: React.FC = () => {
         setFilteredBouquets(bouquets);
     };
 
-    const handleAddToCart = (bouquet: any) => {
+    const handleAddToCart = (bouquet: product_data) => {
         addToCart(bouquet);
         setShowToast(true); 
         setTimeout(() => setShowToast(false), 3000); 
     };
 
-    const handleShowModal = (bouquet: any) => {
+    const handleShowModal = (bouquet: product_data) => {
         setCurrentBouquet(bouquet);
         setShowModal(true);
     };
@@ -145,7 +129,7 @@ const Bouquets: React.FC = () => {
                         <Form.Control 
                             type="number" 
                             value={tempPriceRange.min} 
-                            onChange={(e : any) => handlePriceChange(e, 'min')} 
+                            onChange={(e : React.ChangeEvent<HTMLInputElement>) => handlePriceChange(e, 'min')} 
                             placeholder="Мин. цена"
                             className="d-inline w-auto me-2"
                         />
@@ -153,7 +137,7 @@ const Bouquets: React.FC = () => {
                         <Form.Control 
                             type="number" 
                             value={tempPriceRange.max} 
-                            onChange={(e : any) => handlePriceChange(e, 'max')} 
+                            onChange={(e : React.ChangeEvent<HTMLInputElement>) => handlePriceChange(e, 'max')} 
                             placeholder="Макс. цена"
                             className="d-inline w-auto ms-2"
                         />
@@ -187,12 +171,12 @@ const Bouquets: React.FC = () => {
 
             {!loading && !error && filteredBouquets.length > 0 && (
                 <Row xs={1} sm={2} md={3} lg={4} xl={5} className="g-4">
-                    {filteredBouquets.map((bouquet: any) => (
+                    {filteredBouquets.map((bouquet: product_data) => (
                         <Col key={bouquet.id}>
                             <Card className="h-100">
                                 <Card.Img 
                                     variant="top" 
-                                    src={bouquet.image || '/bulbasavr.gif'} 
+                                    src={'/bulbasavr.gif'} 
                                     alt={bouquet.name} 
                                 />
                                 <Card.Body>
@@ -205,12 +189,7 @@ const Bouquets: React.FC = () => {
                                     </Button>
                                     <Button 
                                         variant="primary" 
-                                        onClick={() => handleAddToCart({ 
-                                            id: bouquet.id, 
-                                            name: bouquet.name, 
-                                            price: bouquet.price, 
-                                            image: bouquet.image || '/bulbasavr.gif' 
-                                        })}
+                                        onClick={() => handleAddToCart(bouquet)}
                                     >
                                         Купить
                                     </Button>

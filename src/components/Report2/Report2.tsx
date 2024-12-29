@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from "../axiosConfig";
-import { userJwtSelector } from '../reducer/UserStore/reducer';
+import { userJwtSelector } from '../../reducer/UserStore/reducer';
 import { useSelector } from 'react-redux';
+import { get_report } from './ReportThunks';
 
 interface report_data {
   seller_name: string,
@@ -32,15 +32,10 @@ const ReportForm2 = () => {
     setError(null);
     setLoading(true);
     try {
-      const response = await axios.get(`/api/otchet2/'${startDate}'/'${endDate}'`, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
+      const response = await get_report(startDate, endDate, jwt);
       setReportData(response.data);
-      const x = reportData.filter((item) => item.product_name !== null);
-      setReportData(x);
-      setFilteredData(x);
+      
+      setFilteredData(response.data);
     } catch (err) {
       setError('Ошибка при получении отчета');
     } finally {
@@ -50,6 +45,7 @@ const ReportForm2 = () => {
 
   const handleFilter = () => {
     let filtered = reportData;
+    filtered.filter((item ) => item.product_name != null);
 
     // Фильтрация по типу товара
     if (filterProductType !== '') {

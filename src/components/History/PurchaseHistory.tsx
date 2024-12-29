@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from "../axiosConfig";
-import { userIdSelector, userJwtSelector } from '../reducer/UserStore/reducer';
+import axios from "../../axiosConfig";
+import { userIdSelector, userJwtSelector } from '../../reducer/UserStore/reducer';
 import { useSelector } from 'react-redux';
 
 interface report_data {

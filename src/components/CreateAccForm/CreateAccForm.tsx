@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from '../axiosConfig';
 import { useNavigate } from 'react-router-dom';
+import {authenticateUser} from './CreateAccFormThunks'
 
 const CreateAccForm: React.FC = () => {
     const [name, setName] = useState("");
@@ -29,7 +29,7 @@ const CreateAccForm: React.FC = () => {
         };
 
         try {
-            const response = await axios.post("/api/create_user", userData);
+            await authenticateUser(userData);
             navigate("/login");
         } catch (err) {
             setError("Произошла ошибка при создании пользователя");
@@ -44,7 +44,7 @@ const CreateAccForm: React.FC = () => {
             <form 
                 onSubmit={handleSubmit} 
                 className="p-4 border rounded shadow-sm" 
-                style={{ maxWidth: '400px', margin: '0 auto' }} // Ограничиваем ширину формы
+                style={{ maxWidth: '400px', margin: '0 auto' }} 
             >
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email:</label>

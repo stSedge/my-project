@@ -1,5 +1,5 @@
 
-import axios from '../axiosConfig';
+import axios from '../../axiosConfig';
 
 
 export const addFlower = async (flowername: string, jwt: string) => {
